@@ -123,6 +123,41 @@ func main() {
 32
 ```
 
+## Example 3
+
+* https://medium.com/@felipedutratine/how-to-organize-the-go-struct-in-order-to-save-memory-c78afcf59ec2
+* https://play.golang.org/p/cUgB54yCpL
+
+```go
+package main
+
+import (
+	"fmt"
+	"unsafe"
+)
+
+type myStruct struct {
+	myInt   bool    // 1 byte
+	myFloat float64 // 8 bytes
+	myBool  int32   // 4 bytes
+}
+
+type myStructOptimized struct {
+	myFloat float64 // 8 bytes
+	myInt   int32   // 4 bytes
+	myBool  bool    // 1 byte
+}
+
+func main() {
+	a := myStruct{}
+	b := myStructOptimized{}
+
+	fmt.Println(unsafe.Sizeof(a)) // unordered 24 bytes
+	fmt.Println(unsafe.Sizeof(b)) // ordered 16 bytes
+}
+
+```
+
 ## Alignment check linter
 * https://github.com/opennota/check
 
