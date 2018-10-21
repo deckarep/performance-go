@@ -2,12 +2,12 @@
 
 * https://github.com/golang/go/issues/9477
 
-* Takeaways
-** Since 1.5 Go now has an optimization which prevents the runtime from doing GC scans on maps that contain no pointers (only value types).
-** Maps with strings, slices, channels, etc all really do contain pointers internally
-** Using truly primitive value types can significantly reduce GC latency and memory footprint
-*** Arrays, ints, bools, etc.
-** For building caches, consider using solutions like: freecache or bigcache. Their design lends to storing 100's of millions of entries by storing all data as bytes which means you trade serialization/deserialization overhead for excessive pointer usage.
+## Takeaways
+* Since 1.5 Go now has an optimization which prevents the runtime from doing GC scans on maps that contain no pointers (only value types).
+* Maps with strings, slices, channels, etc all really do contain pointers internally
+* Using truly primitive value types can significantly reduce GC latency and memory footprint
+* Arrays, ints, bools, etc.
+* For building caches, consider using solutions like: freecache or bigcache. Their design lends to storing 100's of millions of entries by storing all data as bytes which means you trade serialization/deserialization overhead for excessive pointer usage.
 
 ```go
 package main
