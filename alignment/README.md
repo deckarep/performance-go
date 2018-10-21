@@ -1,8 +1,94 @@
-## Alignment as a mechanical sympathy can reduce memory footprint and performance
+## Alignment as a mechanical sympathy can reduce memory footprint and increase performance
 
 ## Check your alignment with the help of this tool
 * For propriertary structs, give the fields generic names when using this tool.
 * http://golang-sizeof.tips/
+* Sometimes all that is necessary is to define larger fields near the top with exceedingly smaller fields towards the bottom.
+
+# Example 1
+
+```go
+package main
+
+import (
+	"fmt"
+	"unsafe"
+)
+
+type struct1 struct {
+	a bool
+	b uint64
+	c bool
+	d uint64
+	e bool
+	f uint16
+
+}
+
+type struct2 struct {
+	b uint64
+	d uint64
+	a bool
+	c bool
+	f uint16
+	e bool
+}
+
+func main() {
+	var sV1 struct1
+	fmt.Printf("struct1: %p\n", &sV1)
+	fmt.Printf("\ta: %p, offset: %d, alignment: %d\n", &sV1.a, unsafe.Offsetof(sV1.a), unsafe.Alignof(sV1.a))
+	fmt.Printf("\tb: %p, offset: %d, alignment: %d\n", &sV1.b, unsafe.Offsetof(sV1.b), unsafe.Alignof(sV1.b))
+	fmt.Printf("\tc: %p, offset: %d, alignment: %d\n", &sV1.c, unsafe.Offsetof(sV1.c), unsafe.Alignof(sV1.c))
+	fmt.Printf("\td: %p, offset: %d, alignment: %d\n", &sV1.d, unsafe.Offsetof(sV1.d), unsafe.Alignof(sV1.d))
+	fmt.Printf("\te: %p, offset: %d, alignment: %d\n", &sV1.e, unsafe.Offsetof(sV1.e), unsafe.Alignof(sV1.e))
+	fmt.Printf("\tf: %p, offset: %d, alignment: %d\n", &sV1.f, unsafe.Offsetof(sV1.f), unsafe.Alignof(sV1.f))
+	fmt.Printf("\n\tsize: %d bytes\n", unsafe.Sizeof(sV1))
+
+	fmt.Printf("\n---\n\n")
+
+	var sV2 struct2
+	fmt.Printf("struct2: %p\n", &sV2)
+	fmt.Printf("\tb: %p, offset: %d, alignment: %d\n", &sV2.b, unsafe.Offsetof(sV2.b), unsafe.Alignof(sV2.b))
+	fmt.Printf("\td: %p, offset: %d, alignment: %d\n", &sV2.d, unsafe.Offsetof(sV2.d), unsafe.Alignof(sV2.d))
+	fmt.Printf("\ta: %p, offset: %d, alignment: %d\n", &sV2.a, unsafe.Offsetof(sV2.a), unsafe.Alignof(sV2.a))
+	fmt.Printf("\tc: %p, offset: %d, alignment: %d\n", &sV2.c, unsafe.Offsetof(sV2.c), unsafe.Alignof(sV2.c))
+	fmt.Printf("\tf: %p, offset: %d, alignment: %d\n", &sV2.f, unsafe.Offsetof(sV2.f), unsafe.Alignof(sV2.f))
+	fmt.Printf("\te: %p, offset: %d, alignment: %d\n", &sV2.e, unsafe.Offsetof(sV2.e), unsafe.Alignof(sV2.e))
+	fmt.Printf("\n\tsize: %d bytes\n", unsafe.Sizeof(sV2))
+}
+```
+
+## Example 2
+
+```go
+package main
+
+import (
+    "fmt"
+    "unsafe"
+)
+
+type Compact struct {
+    a, b                   uint64
+    c, d, e, f, g, h, i, j byte
+}
+
+// Larger memory footprint than "Compact" - but less fields!
+type Inefficient struct {
+    a uint64
+    b byte
+    c uint64
+    d byte
+}
+
+func main() {
+    newCompact := new(Compact)
+    fmt.Println(unsafe.Sizeof(*newCompact))
+    newInefficient := new(Inefficient)
+    fmt.Println(unsafe.Sizeof(*newInefficient))
+}
+```
 
 ## Alignment check linter
 * https://github.com/opennota/check
