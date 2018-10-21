@@ -6,6 +6,7 @@
 * Sometimes all that is necessary is to define larger fields near the top with exceedingly smaller fields towards the bottom.
 
 # Example 1
+* https://play.golang.org/p/dNWspo2Dxv
 
 ```go
 package main
@@ -60,6 +61,7 @@ func main() {
 ```
 
 ## Example 2
+* https://play.golang.org/p/0qsgpuAHHp
 
 ```go
 package main
