@@ -60,6 +60,31 @@ func main() {
 }
 ```
 
+```sh
+// Output
+struct1: 0x44c030
+	a: 0x44c030, offset: 0, alignment: 1
+	b: 0x44c038, offset: 8, alignment: 8
+	c: 0x44c040, offset: 16, alignment: 1
+	d: 0x44c048, offset: 24, alignment: 8
+	e: 0x44c050, offset: 32, alignment: 1
+	f: 0x44c052, offset: 34, alignment: 2
+
+	size: 40 bytes
+
+---
+
+struct2: 0x45a020
+	b: 0x45a020, offset: 0, alignment: 8
+	d: 0x45a028, offset: 8, alignment: 8
+	a: 0x45a030, offset: 16, alignment: 1
+	c: 0x45a031, offset: 17, alignment: 1
+	f: 0x45a032, offset: 18, alignment: 2
+	e: 0x45a034, offset: 20, alignment: 1
+
+	size: 24 bytes
+```
+
 ## Example 2
 * https://play.golang.org/p/0qsgpuAHHp
 
