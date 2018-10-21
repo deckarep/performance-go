@@ -117,6 +117,12 @@ func main() {
 }
 ```
 
+```sh
+# Output
+24
+32
+```
+
 ## Alignment check linter
 * https://github.com/opennota/check
 
