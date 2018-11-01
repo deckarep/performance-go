@@ -1,5 +1,42 @@
 ## Alignment as a mechanical sympathy can reduce memory footprint and increase performance
 
+## Alignment Table
+
+Excerpt referenced from: The Go Programming Language
+
+## Word Size
+
+|Platform|Word Size|
+|----|----|
+|32-bit|4 bytes|
+|64-bit|8 bytes|
+
+## Common sizes
+
+|Type|Size|
+|----|----|
+|bool|1 byte|
+|intN, uintN, floatN, complexN|N/8 bytes (ie float64 is 8 bytes)|
+|int, uint, uintptr|1 word|
+|*T|1 word|
+|string|2 words (data, len)|
+|[]T|3 words (data, len, cap)|
+|map|1 word|
+|func|1 word|
+|chan|1 word|
+|interface|2 words (type, value)|
+
+## Packing examples
+
+Excerpt referenced from: The Go Programming Language
+
+|Sample|64-bit|32-bit|
+|------|------|------|
+|struct{bool; float64; int16}|3 words|4 words|
+|struct{float64; int16; bool}|2 words|3 words|
+|struct{bool; int16; float64}|2 words|3 words|
+
+
 ## Check your alignment with the help of this tool
 * For propriertary structs, give the fields generic names when using this tool.
 * http://golang-sizeof.tips/
