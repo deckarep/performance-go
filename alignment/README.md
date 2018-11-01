@@ -207,3 +207,77 @@ net/http: /usr/lib/go/src/net/http/transfer.go:37:6: struct transferWriter could
 net/http: /usr/lib/go/src/net/http/transport.go:49:6: struct Transport could have size 136 (currently 144)
 net/http: /usr/lib/go/src/net/http/transport.go:811:6: struct persistConn could have size 160 (currently 176)
 ```
+
+## Packing Tighter
+
+```go
+// Uses a struct alignment of 2 where SizeOf => 4
+// Also, this struct has a hidden 8 byte padding added by the compiler.
+struct{
+   a uint16
+}
+```
+
+
+```go
+// Uses a struct alignment of 1 where SizeOf => 3
+// This struct has no hidden padding.
+// If you wanted to, you could pack the 16-bit integer into 2 separate fields (a,b).
+struct{
+   high uint8
+   low uint8
+}
+```
+
+Bit packing can achieve the same thing and removes the extra padding:
+
+```go
+package main
+
+import "fmt"
+
+type f struct {
+	a uint16
+}
+
+type g struct {
+	high uint8
+	low  uint8
+}
+
+func main() {
+	m := f{
+		a: 65055,
+	}
+
+	z := g{
+		high: uint8((m.a >> 8) & 0xffff),
+		low:  uint8(m.a & 0xffff),
+	}
+
+	fmt.Println("Before")
+	fmt.Println("======")
+	fmt.Println("m.a:", m.a)
+	fmt.Println("z.high:", z.high)
+	fmt.Println("z.low:", z.low)
+	fmt.Println()
+
+	fmt.Println("After")
+	fmt.Println("=====")
+	var final uint16
+	final = uint16(z.high)<<8 | uint16(z.low)
+	fmt.Println("Final:", final)
+}
+```
+
+```sh
+Before
+======
+m.a: 65055
+z.high: 254
+z.low: 31
+
+After
+=====
+Final: 65055
+```
